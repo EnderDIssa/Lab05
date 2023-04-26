@@ -6,12 +6,12 @@ import java.time.LocalDate
 /**
  * Person representation class
  */
-class Person(private val name: String, private val height: Int? = null,
+class Person(private val name: String, private val height: Int,
              private val hairColor: Color? = null, private val nationality: Country? = null) {
     init {
         if (name.isEmpty())
             throw InputException("Name couldn't be zero length")
-        if (height != null && height <= 0)
+        if (height <= 0)
             throw InputException("Height couldn't be less than zero")
     }
 
@@ -46,6 +46,8 @@ class Person(private val name: String, private val height: Int? = null,
      * @author Markov Maxim 2023
      */
     fun getNationality() = this.nationality
+
+    override fun toString(): String = "Name: $name Height: $height Hair Color: $hairColor Nationality: $nationality"
 }
 
 class Coordinates(private val x: Float, private val y: Double) {
@@ -82,8 +84,25 @@ class Movie(private var name: String, private var coordinates: Coordinates,
             private var genre: MovieGenre, private var mpaaRating: MpaaRating,
             private var screenWriter: Person
 ) {
-    private var id: Long = giveId()
-    private var creationDate: LocalDate = LocalDate.now()
+    private var id: Long
+    private var creationDate: LocalDate
+
+    constructor(name: String, coordinates: Coordinates,
+                oscarsCount: Long, length: Int,
+                genre: MovieGenre, mpaaRating: MpaaRating,
+                screenWriter: Person, id: Long, date: LocalDate) : this(name, coordinates, oscarsCount, length,
+                                                                        genre, mpaaRating, screenWriter) {
+                this.id = id
+                this.creationDate = date
+                }
+    constructor(name: String, coordinates: Coordinates,
+                oscarsCount: Long, length: Int,
+                genre: MovieGenre, mpaaRating: MpaaRating,
+                screenWriter: Person, id: Long) : this(name, coordinates, oscarsCount, length,
+        genre, mpaaRating, screenWriter) {
+        this.id = id
+        this.creationDate = LocalDate.now()
+    }
 
     init {
         if (name.isEmpty())
@@ -92,7 +111,10 @@ class Movie(private var name: String, private var coordinates: Coordinates,
             throw InputException("Oscars couldn't be less than zero")
         if (length < 1)
             throw InputException("Length couldn't be less than zero")
+        id = giveId()
+        creationDate = LocalDate.now()
     }
+
 
     private companion object {
         var cntId: Long = 0
@@ -156,6 +178,13 @@ class Movie(private var name: String, private var coordinates: Coordinates,
      * @author Markov Maxim 2023
      */
     fun getMpaaRating() = this.mpaaRating
+    /**
+     * Sreenwriter's name getter method
+     *
+     * @return movie id [Long]
+     * @author Berman Denis 2023
+     */
+    fun getScreenwriter() = this.screenWriter
 
     /**
      * Id getter method
@@ -187,6 +216,7 @@ class Movie(private var name: String, private var coordinates: Coordinates,
      * @author Markov Maxim 2023
      */
     fun updateId(id: Long) {
+        cntId -= 1
         this.id = id
     }
 }

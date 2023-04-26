@@ -1,31 +1,31 @@
 package commands
 
-import movies.MovieManager
+import movies.*
 
-class ShowCommand(private val movieManager: MovieManager): Command {
+class PrintDescendingCommand(private val movieManager: MovieManager): Command {
     /**
      * Get information about command abstract method
      *
      * @return information about command [String]
-     * @author Markov Maxim 2023
+     * @author Berman Denis 2023
      */
-    override fun getDescription() = "Command is showing description of all elements in collection in console\n" +
-            "[Command]: show"
+    override fun getDescription() = "Command is printing all the elements descending oscars count value way\n" +
+            "[Command]: print_descending"
 
     /**
      * Get name of command abstract method
      *
      * @return name of command [String]
-     * @author Markov Maxim 2023
+     * @author Berman Denis 2023
      */
-    override fun getName() = "show"
+    override fun getName() = "print_descending"
 
     /**
      * Execute command abstract method.
      *
      * @param argument if it is needed [String]
      * @return none
-     * @author Markov Maxim 2023
+     * @author Berman Denis 2023
      */
     override fun execute(argument: String?): Boolean {
         if (argument != null) {
@@ -34,10 +34,10 @@ class ShowCommand(private val movieManager: MovieManager): Command {
         }
 
         val movies = movieManager.getMovieQueue()
-
-        for (movie in movies) {
-            println("Movie info: $movie")
+        val sortedMovies=movies.sortedWith(compareBy{it.getOscarsCount()}).reversed()
+        for(movie in sortedMovies){
+            println(movie.getOscarsCount())
         }
-        return true
+    return false
     }
 }

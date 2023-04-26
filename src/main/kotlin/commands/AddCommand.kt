@@ -10,8 +10,8 @@ class AddCommand(private val movieManager: MovieManager): Command {
      * @return information about command [String]
      * @author Markov Maxim 2023
      */
-    override fun getDescription() = "Command is showing description of all elements in collection in console\n" +
-            "[Command]: show"
+    override fun getDescription() = "Command is adding new element in collection\n" +
+            "[Command]: add"
 
     /**
      * Get name of command abstract method
@@ -19,45 +19,52 @@ class AddCommand(private val movieManager: MovieManager): Command {
      * @return name of command [String]
      * @author Markov Maxim 2023
      */
-    override fun getName() = "show"
+    override fun getName() = "add"
 
     /**
      * Execute command abstract method.
      *
-     * @param arguments if it is needed [String]
+     * @param argument if it is needed [String]
      * @return none
      * @author Markov Maxim 2023
      */
-    override fun execute(vararg arguments: String?): Boolean {
+    override fun execute(argument: String?): Boolean {
+        if (argument != null) {
+            println("Usage of this command doesn't need any of arguments")
+            return false
+        }
+
         val scanner = Scanner(System.`in`)
         print("Input film name: ")
-        val name = scanner.nextLine()
-        print("Input coordinates: ")
-        print("X: ")
+        val name = scanner.next()
+        println("Input coordinates: ")
+        print("  X: ")
         val xcoord = scanner.nextFloat()
-        print("Y: ")
+        print("  Y: ")
         val ycoord = scanner.nextDouble()
         print("Oscars count: ")
         val oscarsCount = scanner.nextLong()
         print("Length: ")
         val lenght = scanner.nextInt()
         print("Genre: ")
-        val genre = MovieGenre.valueOf(scanner.nextLine())
+        val genreString = scanner.next()
+        val genre = MovieGenre.valueOf(genreString)
         print("Mpaa rating: ")
-        val mpaaRating = MpaaRating.valueOf(scanner.nextLine())
+        val mpaaString = scanner.next()
+        val mpaaRating = MpaaRating.valueOf(mpaaString)
         println("Person:")
-        print("Name: ")
-        val personName = scanner.nextLine()
-        print("Height: ")
+        print("  Name: ")
+        val personName = scanner.next()
+        print("  Height: ")
         val personHeight = scanner.nextInt()
-        print("Hair color: ")
-        val personColor = Color.valueOf(scanner.nextLine())
-        print("Nationality: ")
-        val personNationality = Country.valueOf(scanner.nextLine())
+        print("  Hair color: ")
+        val colorString = scanner.next()
+        val personColor = Color.valueOf(colorString)
+        print("  Nationality: ")
+        val nationalityString = scanner.next()
+        val personNationality = Country.valueOf(nationalityString)
 
-        movieManager.addMovie(Movie(name, Coordinates(xcoord, ycoord), oscarsCount, lenght, genre, mpaaRating,
+        return movieManager.addMovie(Movie(name, Coordinates(xcoord, ycoord), oscarsCount, lenght, genre, mpaaRating,
             Person(personName, personHeight, personColor, personNationality)))
-
-        return true
     }
 }

@@ -1,42 +1,40 @@
 package commands
 
 import movies.*
-import java.util.*
+import java.util.Scanner
 
-class UpdateCommand(private val movieManager: MovieManager): Command {
+class AddIfMaxCommand(private val movieManager: MovieManager): Command {
     /**
      * Get information about command abstract method
      *
      * @return information about command [String]
-     * @author Markov Maxim 2023
+     * @author Berman Denis 2023
      */
-    override fun getDescription() = "Command is updating element from collection\n" +
-            "[Command]: update <id>"
+    override fun getDescription() = "Command is adding element, if it's value more then maximum\n" +
+            "[Command]: add_if_max"
 
     /**
      * Get name of command abstract method
      *
      * @return name of command [String]
-     * @author Markov Maxim 2023
+     * @author Berman Denis 2023
      */
-    override fun getName() = "update"
+    override fun getName() = "add_if_max"
 
     /**
      * Execute command abstract method.
      *
      * @param argument if it is needed [String]
      * @return none
-     * @author Markov Maxim 2023
+     * @author Berman Denis 2023
      */
     override fun execute(argument: String?): Boolean {
-        if (argument == null) {
+        if (argument != null) {
             println("Usage of this command doesn't need any of arguments")
             return false
         }
 
         val scanner = Scanner(System.`in`)
-
-        val id = argument.toLong()
         print("Input film name: ")
         val name = scanner.next()
         println("Input coordinates: ")
@@ -66,8 +64,17 @@ class UpdateCommand(private val movieManager: MovieManager): Command {
         val nationalityString = scanner.next()
         val personNationality = Country.valueOf(nationalityString)
 
-        if (movieManager.removeElementById(id)) movieManager.addMovie(Movie(name, Coordinates(xcoord, ycoord), oscarsCount, lenght, genre,
-            mpaaRating, Person(personName, personHeight, personColor, personNationality), id))
-        return false
+        val movies = movieManager.getMovieQueue()
+        var maxValue:Long=-1
+        for (movie in movies){
+            if (movie.getOscarsCount()>maxValue){
+                maxValue=movie.getOscarsCount()
+            }
+        }
+        if (maxValue>oscarsCount){
+            return movieManager.addMovie(Movie(name, Coordinates(xcoord, ycoord), oscarsCount, lenght, genre, mpaaRating,
+                Person(personName, personHeight, personColor, personNationality)))
+        }
+    return false
     }
 }
